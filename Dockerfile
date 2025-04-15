@@ -4,6 +4,12 @@ FROM node:12.2.0-alpine
 # Install OpenSSH
 RUN apk update && apk add --no-cache openssh
 
+# Enable password authentication for SSH
+RUN sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+# Set a password for the root user
+RUN echo 'root:1234' | chpasswd
+
 # Create SSH directory and set authorized keys
 RUN mkdir -p /root/.ssh && \
     chmod 700 /root/.ssh && \
